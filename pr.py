@@ -78,11 +78,15 @@ def ARKplusSB(m,k):
 def DistribMaker(N):
 	D={}
 	k=GenOctet()
+	for p in range (0,9): #Remise à zéro TabOccurences
+			for q in range (0,9):
+				TabOccurences[(p,q)]=0
 	for i in range (0,N):
 		m=GenOctet()
 		(hm,hy)=ARKplusSB(m,k)
 		TabOccurences[(hm,hy)]=TabOccurences[(hm,hy)]+1
-	D=TabOccurences
+	LTO=list(TabOccurences.items())
+	D=LTO
 	return D
 
 def CalculDistance():
@@ -93,9 +97,9 @@ def GenEnsMk():
 	liste={}
 	for i in range (0,256): #Cycle sur les k
 		transit=i
-		#for p in range (0,9): #Remise à zéro TabOccurences
-		#	for q in range (0,9):
-		#		TabOccurences[(p,q)]=0
+		for p in range (0,9): #Remise à zéro TabOccurences
+			for q in range (0,9):
+				TabOccurences[(p,q)]=0
 		i=bin(i)[2:]
 		while len(i)<8:
 			i='0'+i
@@ -105,18 +109,20 @@ def GenEnsMk():
 				j='0'+j
 			(hm,hy)=ARKplusSB(j,i)
 			TabOccurences[(hm,hy)]=TabOccurences[(hm,hy)]+1
-		liste[transit]=TabOccurences
+		LTO=list(TabOccurences.items())
+		liste[transit]=LTO
 	return liste
 
 			
 
 ListeMk=GenEnsMk()
-print(ListeMk[0])
-#for p in range (0,9): #Remise à zéro TabOccurences
-#			for q in range (0,9):
-#				TabOccurences[(p,q)]=0	
 #R=input('Combien de runs? ')
-print('\n')
-print(ListeMk[1])
+#print('\n')
 #N=input("Pour combien de messages? ")
 #print('\n')
+N=1
+D=DistribMaker(N)
+print(D)
+print('\n')
+E=DistribMaker(N)
+print(E)
