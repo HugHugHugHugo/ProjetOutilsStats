@@ -90,8 +90,17 @@ def DistribMaker(N):
 	return k,D
 
 def CalculDistance(D):
-
-	return B
+	dmin=15000000000000000
+	kmin=0
+	for h in range (0,256):
+		d=0
+		for i in range (0,9):
+			for j in range (0,9):
+				d=d+(D[9*i+j][1]-ListeMk[h][9*i+j][1])**2
+		if d<dmin:
+			dmin=d
+			kmin=h
+	return kmin
 
 def GenEnsMk():
 	liste={}
@@ -115,19 +124,31 @@ def GenEnsMk():
 
 def UneRun(N):
 	(k,D)=DistribMaker(N)
+	for i in range (0,81):
+		 ltrans=list(D[i])
+		 ltrans[1]=ltrans[1]/N
+		 D[i]=(ltrans[0],ltrans[1])
 	RC=CalculDistance(D)
-	if RC==k:
+	RCi=bin(RC)[2:]
+	while len(RCi)<8 :
+		RCi='0'+RCi
+	if RCi==k:
 		return 1
 	else:
 		return 0
 
 ListeMk=GenEnsMk()
+for i in range (0,256):
+	for j in range (0,81):
+		ltrans=list(ListeMk[i][j])
+		ltrans[1]=ltrans[1]/256
+		ListeMk[i][j]=(ltrans[0],ltrans[1])
 R=input('Combien de runs? ')
 print('\n')
 N=input("Pour combien de messages? ")
 print('\n')
 CompteurReussite=0
-for i in range(0,N):
-	CompteurReussite=CompteurReussite+UneRun(N)
-TauxSucces=(CompteurReussite*100)/R
-print('Attaque réussie à '+TauxSucces+'%')
+for i in range(0,int(R)):
+	CompteurReussite=CompteurReussite+UneRun(int(N))
+TauxSucces=(CompteurReussite*100)/int(R)
+print('Attaque réussie à '+str(TauxSucces)+'%')
