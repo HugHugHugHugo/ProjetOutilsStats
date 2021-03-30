@@ -87,9 +87,9 @@ def DistribMaker(N):
 		TabOccurences[(hm,hy)]=TabOccurences[(hm,hy)]+1
 	LTO=list(TabOccurences.items())
 	D=LTO
-	return D
+	return k,D
 
-def CalculDistance():
+def CalculDistance(D):
 
 	return B
 
@@ -113,16 +113,21 @@ def GenEnsMk():
 		liste[transit]=LTO
 	return liste
 
-			
+def UneRun(N):
+	(k,D)=DistribMaker(N)
+	RC=CalculDistance(D)
+	if RC==k:
+		return 1
+	else:
+		return 0
 
 ListeMk=GenEnsMk()
-#R=input('Combien de runs? ')
-#print('\n')
-#N=input("Pour combien de messages? ")
-#print('\n')
-N=1
-D=DistribMaker(N)
-print(D)
+R=input('Combien de runs? ')
 print('\n')
-E=DistribMaker(N)
-print(E)
+N=input("Pour combien de messages? ")
+print('\n')
+CompteurReussite=0
+for i in range(0,N):
+	CompteurReussite=CompteurReussite+UneRun(N)
+TauxSucces=(CompteurReussite*100)/R
+print('Attaque réussie à '+TauxSucces+'%')
