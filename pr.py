@@ -36,6 +36,11 @@ InvSBOX=[0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E,
 	0xA0, 0xE0, 0x3B, 0x4D, 0xAE, 0x2A, 0xF5, 0xB0, 0xC8, 0xEB, 0xBB, 0x3C, 0x83, 0x53, 0x99, 0x61,
 	0x17, 0x2B, 0x04, 0x7E, 0xBA, 0x77, 0xD6, 0x26, 0xE1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0C, 0x7D]
 
+TabOccurences={}
+for i in range (0,9):
+	for j in range (0,9):
+		TabOccurences[(i,j)]=0
+
 def GenOctet():
 	random.seed()
 	nbr=random.choice('01')
@@ -70,29 +75,48 @@ def ARKplusSB(m,k):
 	hy=HW(y)
 	return hm,hy
 
-def DistribMaker():
-
-	return A
+def DistribMaker(N):
+	D={}
+	k=GenOctet()
+	for i in range (0,N):
+		m=GenOctet()
+		(hm,hy)=ARKplusSB(m,k)
+		TabOccurences[(hm,hy)]=TabOccurences[(hm,hy)]+1
+	D=TabOccurences
+	return D
 
 def CalculDistance():
 
 	return B
 
 def GenEnsMk():
-	ListeMk=[]
-	for i in range (0,256):
+	liste={}
+	for i in range (0,256): #Cycle sur les k
+		transit=i
+		#for p in range (0,9): #Remise à zéro TabOccurences
+		#	for q in range (0,9):
+		#		TabOccurences[(p,q)]=0
 		i=bin(i)[2:]
 		while len(i)<8:
 			i='0'+i
-		for j in range (0,256):
+		for j in range (0,256): #Cycle sur les m
 			j=bin(j)[2:]
 			while len(j)<8:
 				j='0'+j
 			(hm,hy)=ARKplusSB(j,i)
+			TabOccurences[(hm,hy)]=TabOccurences[(hm,hy)]+1
+		liste[transit]=TabOccurences
+	return liste
+
 			
 
-
-R=input('Combien de runs? ')
+ListeMk=GenEnsMk()
+print(ListeMk[0])
+#for p in range (0,9): #Remise à zéro TabOccurences
+#			for q in range (0,9):
+#				TabOccurences[(p,q)]=0	
+#R=input('Combien de runs? ')
 print('\n')
-N=input("Pour combien de messages? ")
-print('\n')
+print(ListeMk[1])
+#N=input("Pour combien de messages? ")
+#print('\n')
