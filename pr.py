@@ -2,6 +2,9 @@
 
 import random
 
+#################################################################################################
+#Partie TP
+
 SBOX=[0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
    0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0,
    0xB7, 0xFD, 0x93, 0x26, 0x36, 0x3F, 0xF7, 0xCC, 0x34, 0xA5, 0xE5, 0xF1, 0x71, 0xD8, 0x31, 0x15,
@@ -136,6 +139,25 @@ def UneRun(N):
 		return 1
 	else:
 		return 0
+
+#################################################################################################
+#Partie méthode slice
+def Factoriel(n):
+	if n==0 :
+		return 1
+	else :
+		F=1
+		for i in range (2,n+1) :
+			F=F*k
+		return F
+
+def Parmi(k,n):
+	c=Factoriel(n)/(Factoriel(k)*Factoriel(n-k))
+	return c
+
+
+#################################################################################################
+#Partie éxecution
 
 ListeMk=GenEnsMk()
 for i in range (0,256):
