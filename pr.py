@@ -155,6 +155,24 @@ def Parmi(k,n):
 	c=Factoriel(n)/(Factoriel(k)*Factoriel(n-k))
 	return c
 
+# On suppose que les consommations sont fournies dans une liste 1D
+
+def SlicesToD(liste):
+	lPH=[]
+	while len(LPH)<len(liste):
+		LPH.append(0)
+	lToTriage=[]
+	for h in range (0,len(liste)):
+		lToTriage.append((h,liste[h]))
+	lToTriage=sorted(lToTriage, key=lambda t:t[1])
+	for i in range (0,9):
+		nb=(len(liste)/256)*Parmi(i,8)
+		if nb>1 :	
+			for j in range (0,int(nb)):
+				LPH[lToTriage[0][0]]=i
+				lToTriage.pop(0) # Après ça on a interprété la liste d'entrée en poids de Hamming 
+
+
 
 #################################################################################################
 #Partie éxecution
