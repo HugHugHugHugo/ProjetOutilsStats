@@ -78,7 +78,7 @@ def ARKplusSB(m,k):
 	hy=HW(y)
 	return hm,hy
 
-def DistribMaker(N):
+def RandDistribMaker(N):
 	D={}
 	k=GenOctet()
 	for p in range (0,9): #Remise à zéro TabOccurences
@@ -141,6 +141,10 @@ def UneRun(N):
 		return 0
 
 #################################################################################################
+#Partie générateur de mesures bruitées
+def GenMesBruitees(a,b,bruit):
+
+#################################################################################################
 #Partie méthode slice
 def Factoriel(n):
 	if n==0 :
@@ -157,8 +161,8 @@ def Parmi(k,n):
 
 # On suppose que les consommations sont fournies dans une liste 1D
 
-def SlicesToD(liste):
-	lPH=[]
+def listToD(liste):
+	LPH=[]
 	while len(LPH)<len(liste):
 		LPH.append(0)
 	lToTriage=[]
@@ -171,6 +175,27 @@ def SlicesToD(liste):
 			for j in range (0,int(nb)):
 				LPH[lToTriage[0][0]]=i
 				lToTriage.pop(0) # Après ça on a interprété la liste d'entrée en poids de Hamming 
+	return LPH
+
+def Slices(listeM,listeY):
+	lHm=listToD(listeM)
+	lHy=listToD(listeY)
+	if len(lHm) != len(lHy) :
+		return 'Incohérence dans le nombre de mesures'
+	for i in range(0,len(lHm)):
+		TabOccurences[(lHm[i],lHy[i])]=TabOccurences[(lHm,lHy)]+1
+	for j in range (0,81):
+		 ltrans=list(TabOccurences[j])
+		 ltrans[1]=ltrans[1]/N
+		 TabOccurences[i]=(ltrans[0],ltrans[1])
+	RC=CalculDistance(TabOccurences)
+	RCi=bin(RC)[2:]
+	while len(RCi)<8 :
+		RCi='0'+RCi # Après ça RCi = la clé que l'algo trouve
+	return RCi
+
+#################################################################################################
+#Partie méthode du maximum de vraisemblance
 
 
 
