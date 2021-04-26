@@ -126,8 +126,8 @@ def GenEnsMk():
 	return liste
 
 def UneRun(N):
-	(k,D)=DistribMaker(N)
-	for i in range (0,81):
+	(k,D)=RandDistribMaker(N)
+	for i in range (0,len(D)):
 		 ltrans=list(D[i])
 		 ltrans[1]=ltrans[1]/N
 		 D[i]=(ltrans[0],ltrans[1])
@@ -142,7 +142,18 @@ def UneRun(N):
 
 #################################################################################################
 #Partie générateur de mesures bruitées
-def GenMesBruitees(a,b,bruit):
+def GenMesBruitees(nb,a,b,bruit):
+	lm=[]
+	ly=[]
+	k=GenOctet()
+	for i in range(0,int(nb)):
+		m=GenOctet()
+		(hm,hy)=ARKplusSB(m,k)
+		Mesm=a*hm+b+random.gauss(0,a*float(bruit))
+		Mesy=a*hy+b+random.gauss(0,a*float(bruit))
+		lm.append(Mesm)
+		ly.append(Mesy)
+	return lm,ly,k
 
 #################################################################################################
 #Partie méthode slice
@@ -152,7 +163,7 @@ def Factoriel(n):
 	else :
 		F=1
 		for i in range (2,n+1) :
-			F=F*k
+			F=F*i
 		return F
 
 def Parmi(k,n):
@@ -177,18 +188,19 @@ def listToD(liste):
 				lToTriage.pop(0) # Après ça on a interprété la liste d'entrée en poids de Hamming 
 	return LPH
 
-def Slices(listeM,listeY):
+def Slices(listeM,listeY,N):
 	lHm=listToD(listeM)
 	lHy=listToD(listeY)
 	if len(lHm) != len(lHy) :
 		return 'Incohérence dans le nombre de mesures'
 	for i in range(0,len(lHm)):
-		TabOccurences[(lHm[i],lHy[i])]=TabOccurences[(lHm,lHy)]+1
-	for j in range (0,81):
-		 ltrans=list(TabOccurences[j])
+		TabOccurences[(lHm[i],lHy[i])]=TabOccurences[(lHm[i],lHy[i])]+1
+	TAB=list(TabOccurences.items())
+	for compt in range (0,len(TAB)):
+		 ltrans=list(TAB[compt])
 		 ltrans[1]=ltrans[1]/N
-		 TabOccurences[i]=(ltrans[0],ltrans[1])
-	RC=CalculDistance(TabOccurences)
+		 TAB[compt]=(ltrans[0],ltrans[1])
+	RC=CalculDistance(TAB)
 	RCi=bin(RC)[2:]
 	while len(RCi)<8 :
 		RCi='0'+RCi # Après ça RCi = la clé que l'algo trouve
@@ -196,7 +208,6 @@ def Slices(listeM,listeY):
 
 #################################################################################################
 #Partie méthode du maximum de vraisemblance
-
 
 
 #################################################################################################
@@ -208,12 +219,55 @@ for i in range (0,256):
 		ltrans=list(ListeMk[i][j])
 		ltrans[1]=ltrans[1]/256
 		ListeMk[i][j]=(ltrans[0],ltrans[1])
-R=input('Combien de runs? ')
+
+Menu=input('Voulez vous utiliser: \nLa méthode du TP tapez TP \nLa méthode des slices tapez S \nLa méthode du maximum de vraisemblances tapez M \n(Dans les deux dernière méthodes les mesures de courant sont générées bruitées) \nVotre choix: ')
 print('\n')
-N=input("Pour combien de messages? ")
-print('\n')
-CompteurReussite=0
-for i in range(0,int(R)):
-	CompteurReussite=CompteurReussite+UneRun(int(N))
-TauxSucces=(CompteurReussite*100)/int(R)
-print('Attaque réussie à '+str(TauxSucces)+'%')
+if Menu=='TP':
+	R=input('Combien de runs? ')
+	print('\n')
+	N=input("Pour combien de messages? ")
+	print('\n')
+	CompteurReussite=0
+	for i in range(0,int(R)):
+		CompteurReussite=CompteurReussite+UneRun(int(N))
+	TauxSucces=(CompteurReussite*100)/int(R)
+	print('Attaque réussie à '+str(TauxSucces)+'%')
+if Menu=='S':
+	R=input('Combien de runs? ')
+	print('\n')
+	N=input("Pour combien de messages (donc de mesures)? ")
+	print('\n')
+	a=random.uniform(1,5)
+	b=random.uniform(50,100)
+	qual=input('Qualité de la modélisation? (de 0.5 à 5) ')
+	CompteurReussite=0
+	for i in range(0,int(R)):
+		(lim,liy,k)=GenMesBruitees(N,a,b,qual)
+		kpeutetre=Slices(lim,liy,int(N))
+		for p in range (0,9): #Remise à zéro TabOccurences
+			for q in range (0,9):
+				TabOccurences[(p,q)]=0
+		if k==kpeutetre :
+			CompteurReussite += 1
+	TauxSucces=(CompteurReussite*100)/int(R)
+	print('Attaque réussie à '+str(TauxSucces)+'%')
+	print('\n')
+if Menu=='M':
+	R=input('Combien de runs? ')
+	print('\n')
+	N=input("Pour combien de messages (donc de mesures)? ")
+	print('\n')
+	a=random.uniform(1,5)
+	b=random.uniform(50,100)
+	qual=input('Qualité de la modélisation? (de 0.5 à 5)')
+	for i in range(0,int(R)):
+		(lim,liy,k)=GenMesBruitees(N,a,b,qual)
+		kpeutetre=
+		for p in range (0,9): #Remise à zéro TabOccurences
+			for q in range (0,9):
+				TabOccurences[(p,q)]=0
+		if k==kpeutetre :
+			CompteurReussite += 1
+	TauxSucces=(CompteurReussite*100)/int(R)
+	print('Attaque réussie à '+str(TauxSucces)+'%')
+	print('\n')
