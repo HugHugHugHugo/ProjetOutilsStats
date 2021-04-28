@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import random
+import math
 
 #################################################################################################
 #Partie TP
@@ -172,7 +173,7 @@ def Parmi(k,n):
 
 # On suppose que les consommations sont fournies dans une liste 1D
 
-def listToD(liste):
+def listToSlices(liste):
 	LPH=[]
 	while len(LPH)<len(liste):
 		LPH.append(0)
@@ -189,8 +190,8 @@ def listToD(liste):
 	return LPH
 
 def Slices(listeM,listeY,N):
-	lHm=listToD(listeM)
-	lHy=listToD(listeY)
+	lHm=listToSlices(listeM)
+	lHy=listToSlices(listeY)
 	if len(lHm) != len(lHy) :
 		return 'Incohérence dans le nombre de mesures'
 	for i in range(0,len(lHm)):
@@ -208,7 +209,39 @@ def Slices(listeM,listeY,N):
 
 #################################################################################################
 #Partie méthode du maximum de vraisemblance
+def PrHsHe(hm,hy,hM,hY,bruit):
+	a=(1/(float(bruit)*math.sqrt(2*math.pi))) * math.exp(-(1/2)*((hm-hM)/float(bruit))**2)
+	b=(1/(float(bruit)*math.sqrt(2*math.pi))) * math.exp(-(1/2)*((hm-hM)/float(bruit))**2)
+	c=a*b
+	return c
 
+def PrHsk(hm,hy,k,bruit):
+	res=0
+	for i in range(0,9):
+		for j in range(0,9):
+			res += PrHsHe(hm,hy,i,j,bruit)*ListeMk[k][9*i+j][1]
+	return res
+
+def Calmax(a,b,listeM,listeY,bruit):
+	lsor=[]
+	for i in range(0,len(listeM)):
+		lsor.append(((listeM[i]-b)/a,(listeY[i]-b)/a))
+	ProbaMax=-15000000000000000
+	kProbaMax=0
+	for j in range(0,256):
+		Probaj=1
+		for m in range(0,len(lsor)):
+			Probaj = Probaj * math.log(PrHsk(lsor[m][0],lsor[m][1],j,bruit))
+		print(Probaj)
+		if Probaj > ProbaMax :
+			ProbaMax=Probaj
+			kProbaMax=j
+		print(ProbaMax)
+		print(kProbaMax)
+	RCi=bin(kProbaMax)[2:]
+	while len(RCi)<8 :
+		RCi='0'+RCi # Après ça RCi = la clé que l'algo trouve
+	return RCi
 
 #################################################################################################
 #Partie éxecution
@@ -220,13 +253,10 @@ for i in range (0,256):
 		ltrans[1]=ltrans[1]/256
 		ListeMk[i][j]=(ltrans[0],ltrans[1])
 
-Menu=input('Voulez vous utiliser: \nLa méthode du TP tapez TP \nLa méthode des slices tapez S \nLa méthode du maximum de vraisemblances tapez M \n(Dans les deux dernière méthodes les mesures de courant sont générées bruitées) \nVotre choix: ')
-print('\n')
+Menu=input('Voulez vous utiliser: \nLa méthode du TP tapez TP \nLa méthode des slices tapez S \nLa méthode du maximum de vraisemblances tapez MV \n(Dans les deux dernière méthodes les mesures de courant sont générées bruitées) \nVotre choix: ')
 if Menu=='TP':
 	R=input('Combien de runs? ')
-	print('\n')
 	N=input("Pour combien de messages? ")
-	print('\n')
 	CompteurReussite=0
 	for i in range(0,int(R)):
 		CompteurReussite=CompteurReussite+UneRun(int(N))
@@ -234,9 +264,7 @@ if Menu=='TP':
 	print('Attaque réussie à '+str(TauxSucces)+'%')
 if Menu=='S':
 	R=input('Combien de runs? ')
-	print('\n')
 	N=input("Pour combien de messages (donc de mesures)? ")
-	print('\n')
 	a=random.uniform(1,5)
 	b=random.uniform(50,100)
 	qual=input('Qualité de la modélisation? (de 0.5 à 5) ')
@@ -248,26 +276,31 @@ if Menu=='S':
 			for q in range (0,9):
 				TabOccurences[(p,q)]=0
 		if k==kpeutetre :
+			print('Run '+str(i+1)+': OK')
 			CompteurReussite += 1
+		else :
+			print('Run '+str(i+1)+': Raté')
 	TauxSucces=(CompteurReussite*100)/int(R)
 	print('Attaque réussie à '+str(TauxSucces)+'%')
-	print('\n')
-if Menu=='M':
+if Menu=='MV':
 	R=input('Combien de runs? ')
-	print('\n')
 	N=input("Pour combien de messages (donc de mesures)? ")
-	print('\n')
 	a=random.uniform(1,5)
 	b=random.uniform(50,100)
-	qual=input('Qualité de la modélisation? (de 0.5 à 5)')
+	qual=input('Qualité de la modélisation? (de 0.5 à 5) ')
+	CompteurReussite=0
 	for i in range(0,int(R)):
 		(lim,liy,k)=GenMesBruitees(N,a,b,qual)
-		kpeutetre=
+		kpeutetre=Calmax(a,b,lim,liy,float(qual))
+		print(k)
+		print(kpeutetre)
 		for p in range (0,9): #Remise à zéro TabOccurences
 			for q in range (0,9):
 				TabOccurences[(p,q)]=0
 		if k==kpeutetre :
+			print('Run '+str(i+1)+': OK')
 			CompteurReussite += 1
+		else :
+			print('Run '+str(i+1)+': Raté')
 	TauxSucces=(CompteurReussite*100)/int(R)
 	print('Attaque réussie à '+str(TauxSucces)+'%')
-	print('\n')
