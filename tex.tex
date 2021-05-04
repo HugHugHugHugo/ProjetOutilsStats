@@ -1,0 +1,808 @@
+\documentclass[12pt]{article}
+%\usepackage{natbib}
+\usepackage[french]{babel}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{vmargin}
+\usepackage{xcolor}
+\usepackage{bbm}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\usepackage{dsfont}
+\usepackage{stmaryrd}
+\usepackage{systeme}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pifont}
+\usepackage{textcomp}
+\usepackage{calrsfs}
+
+\title{Devoir Maison}
+\author{CARVAILLO Thomas, PONS Hugo}
+\date{\today}
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\theauthor}
+\lhead{\thetitle}
+\cfoot{\thepage}
+\def\dotfill#1{\cleaders\hbox to #1{.}\hfill}
+\newcommand\dotline[2][.5em]{\leavevmode\hbox to #2{\dotfill{#1}\hfil}}
+
+
+
+\newcommand{\R}{\mathbbm{R}}
+\newcommand{\N}{\mathbbm{N}}
+\newcommand{\1}{\mathbbm{1}}
+\newcommand{\E}{\mathbbm{E}}
+\newcommand{\V}{\mathbbm{V}}
+\newcommand{\Prob}{\mathbbm{P}}
+\newcommand{\Nc}{\mathcal{N}}
+\newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Xti}{\widetilde{X_i}}
+\newcommand{\Xtj}{\widetilde{X_j}}
+\newcommand{\Xn}{\overline{X_n}}
+\newcommand{\gn}{\hat{g_n}}
+
+%définition commande présentation fonction
+\newcommand{\fonction}[5]{
+\begin{displaymath}
+\begin{array}{l|rcl}
+\displaystyle
+#1 : & #2 & \longrightarrow & #3 \\
+    & #4 & \longmapsto & #5
+\end{array}
+\end{displaymath}
+}
+%fin définition
+
+% de jolies accolades
+\newcommand{\accolade}[2]{
+\begin{displaymath}
+%#1 = \left\{
+    \begin{array}{ll}
+       #1 %& \mbox{si }
+       #2 %& \mbox{sinon.}
+    \end{array}
+\right.
+\end{displaymath}
+}
+% de jolies accolades
+
+
+
+
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Théorème}
+\newtheorem{cor}{Corollaire}
+\newtheorem{lem}{Lemme}
+\theoremstyle{definition}\newtheorem{defn}{Définition}
+\theoremstyle{definition}\newtheorem{exm}{Exemple}
+\theoremstyle{definition}\newtheorem{rem}{Remarque}
+\theoremstyle{definition}\newtheorem{algo}{Algorithme}
+\theoremstyle{remark}\newtheorem{exo}{Exercice}
+\theoremstyle{remark}\newtheorem{nota}{Notation}
+\theoremstyle{definition}\newtheorem{1q}{Question}
+\theoremstyle{definition}\newtheorem{2q}{Question}
+\theoremstyle{definition}\newtheorem{3q}{Question}
+\theoremstyle{definition}\newtheorem{4q}{Question}
+\theoremstyle{definition}\newtheorem{2qs1}{}
+\theoremstyle{definition}\newtheorem{2qs2}{}
+\theoremstyle{definition}\newtheorem{2qs3}{}
+\theoremstyle{definition}\newtheorem{2qs4}{}
+\theoremstyle{definition}\newtheorem{4qs2}{}
+\theoremstyle{definition}\newtheorem{4qs3}{}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+    \textsc{\LARGE Outils Statistiques}\\[1.0 cm]
+	\vspace{1.5cm}
+	\rule{\linewidth}{0.2 mm} \\[0.4 cm]
+	{ \huge \bfseries  \thetitle}\\ %\color{blue}
+	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+			\emph{A l'attention de :}\\
+			Mr. Silva\\
+			\phantom{a}\\
+			\phantom{a}\\
+		\end{flushleft}
+	\end{minipage}
+	\begin{minipage}{0.5\textwidth}
+    	\begin{flushright} \large
+		\emph{Rédigé par :}\\
+		CARVAILLO Thomas \\
+		PONS Hugo \\
+		\end{flushright}
+	\end{minipage}\\[2 cm]
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+
+\textsc{Note:} Dans ce qui suit, on notera $\1_A(x)$ l'indicatrice de $A$, .i.e. $\1_A(x) = 1$ si $x\in A$ et $\1_A(x) = 0$ si $x\notin A$\newline
+$\phi$ désignera une fonction borélienne
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Problème 1}
+Soit $X=(X_1, \ldots X_n)$\newline
+Soient  $U,V\subseteq \R^n$ \newline
+Soit \fonction{g}{U}{V}{x}{y=g(x)} de classe $\mathcal{C}^1$ nulle sur $\R^n-U$ de matrice jacobienne inversible.\newline
+Soit $Y:= g(X)$\newline
+Soient $x=(x_1,\ldots, x_n)$ et $y=(y_1,\ldots, y_n)$
+\begin{1q}
+Déterminons si $Y$ admet une densité, pour cela donnons nous une fonction $\phi : \R^n \longrightarrow \R^n$ borélienne et considérons $\E(\phi(g(X)))$.
+\begin{align*}
+\E(\phi(g(X))) &= \int_{\Omega}\phi(g(X))d\Prob\\
+&= \int_{\R^n}\phi(g(x))d\Prob_X\\
+&= \int_{U}\phi(g(x))f_X(x)dx\\
+& \text{Par le théorème de changement de variable sur $\R^n$, en posant $y=g(x)$, on obtient}\\
+\E(\phi(g(X)))&= \int_{g(U)}\phi(y)f_X(g^{-1}(y))|det(D_g(g^{-1}(y)))|dy\\
+\end{align*}
+Or, par propriété de la matrice jacobienne, on a que
+\begin{center}$ \displaystyle D_g^{-1}(y) = \frac{1}{D_g(x)} = \frac{1}{D_g(g^{-1}(y))} $     (via $x=g^{-1}(y)$)\end{center}
+d'où
+\begin{align*}
+\E(\phi(g(X))) &=\int_{V}\phi(y)\frac{f_X(g^{-1}(y))}{|detD_g(g^{-1}(y))|}dy\\
+&= \int_{\R^n}\phi(y)\1_V(y)\frac{f_X(g^{-1}(y))}{ |detD_g(g^{-1}(y))|}dy\\
+\end{align*}
+$Y$ est donc absolument continue, de densité
+\begin{center}$\displaystyle f_Y(y) = \1_V(y)\frac{f_X(g^{-1}(y))}{|detD_g(g^{-1}(y))|}$\end{center}
+\end{1q}
+
+\begin{1q}	
+Soient $X_1, X_2$ deux v.a. de densité jointe 
+\begin{center}$f_{(X_1, X_2)} = 2.\1_{\{0<x_1<x_2<\infty\}}(x_1,x_2)e^{-x_1-x_2}$\end{center}
+Soit $(Y_1, Y_2) = (2X_1, X_2-X_1)$.\newline
+On a donc $(Y_1, Y_2) = g(X)$, où $g=\begin{pmatrix}2&0\\-1&1\end{pmatrix}$ et donc \newline
+$g^{-1}=\begin{pmatrix}1/2&0\\1/2&1\end{pmatrix}$ avec $g^{-1}: (y_1, y_2)\longrightarrow (1/2y_1, 1/2y_1,y_2)$.\newline
+Remarquons que $|detD_g(g^{-1}(y))|=|detD_g(x)|= \begin{vmatrix}2&0\\-1&1\end{vmatrix}=2$ puis que 
+\begin{align*}
+g(\{0<x_1<x_2<\infty\})&=\{(2x_1,x_2-x_1), 0<x_1<x_2<\infty\}=\{(x,y)\in\R^2, x>0, y>0\}
+\end{align*}
+Donc, par la question 1) on obtient que 
+\begin{align*}
+ f_{(Y_1,Y_2)}(y_1,y_2) &= \1_{\{(y_1,y_2)\in\R^2, y_1>0, y_2>0\}}\frac{f_X(g^{-1}((y_1,y_2)))}{det|D_g(g^{-1}((y_1,y_2)))|}\\
+ &=  \1_{\{(y_1,y_2)\in\R^2, y_1>0, y_2>0\}}\frac{2.e^{g^{-1}(y_1,y_2)}}{2}\\
+ &=  \1_{\{(y_1,y_2)\in\R^2, y_1>0, y_2>0\}}e^{-y_1-y_2}\\
+\end{align*}
+Les deux variables sont indépendantes, en effet
+\begin{align*}
+f_{Y_1}&=\int_\R  f_{(Y_1,Y_2)}(y_1,y_2) dy_2\\
+&=\int_\R  \1_{\{(y_1,y_2)\in\R^2, y_1>0, y_2>0\}}e^{-y_1-y_2}dy_2\\
+&=\1_{\R_+}(y_1)e^{-y_1}\int_{\R_+}e^{-y_2}dy_2\\
+&=\1_{\R_+}(y_1)e^{-y_1}
+\end{align*}
+et
+\begin{align*}
+f_{Y_2}&=\int_\R  f_{(Y_1,Y_2)}(y_1,y_2) dy_1\\
+&=\int_\R  \1_{\{(y_1,y_2)\in\R^2, y_1>0, y_2>0\}}e^{-y_1-y_2}dy_1\\
+&=\1_{\R_+}(y_2)e^{-y_2}\int_{\R_+}e^{-y_1}dy_1\\
+&=\1_{\R_+}(y_2)e^{-y_2}
+\end{align*}
+donc 
+\begin{center}$f_{Y_1}.f_{Y_2}= \1_{\R_+}(y_1)e^{-y_1}\1_{\R_+}(y_2)e^{-y_2}= \1_{\{y_1>0, y_2>0\}}(y_1,y_2)e^{-y_1-y_2}=f_{(Y_1,Y_2)}$\end{center} ce qui signifie que les v.a. sont indépendantes.
+\end{1q}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Problème 2}
+
+On définit $\Gamma(\alpha) = \int_{\R_+}x^{\alpha-1}e^{-x}dx, \alpha >0$.
+
+%%%
+\begin{2q}
+\begin{2qs1}
+Soient $\lambda_1, \lambda_2$ tels que $0 < \lambda_1 < \lambda_2 <\infty$\newline
+D'une part, on a
+\begin{align*}
+\int_{\lambda_1}^{\lambda_2}t^\alpha e^{-t} &= [-t^\alpha e^{-t}]_{\lambda_1}^{\lambda_2} + \alpha\int_{\lambda_1}^{\lambda_2}t^{\alpha-1}e^{-t}dt\\
+&= -\lambda_2^\alpha e^{-\lambda_2} +\lambda_1^\alpha e^{-\lambda_1} +\alpha\int_{\lambda_1}^{\lambda_2}t^{\alpha-1}e^{-t}dt\\
+\end{align*}
+D'autre part, 
+\begin{align*}
+\Gamma(\alpha+1) &= \int_{\R_+}t^\alpha e^{-t}dt \\
+&= lim_{\lambda_1,  \rightarrow 0, \lambda_2 \rightarrow \infty} \int_{\lambda_1}^{\lambda_2}t^{\alpha}e^{-t}dt\\
+&=  lim_{\lambda_1,  \rightarrow 0, \lambda_2 \rightarrow \infty} -\lambda_2^\alpha e^{-\lambda_2} +\lambda_1^\alpha e^{-\lambda_1} +\alpha\int_{\lambda_1}^{\lambda_2}t^{\alpha-1}e^{-t}dt\\
+&= \alpha.lim_{\lambda_1,  \rightarrow 0, \lambda_2 \rightarrow \infty}\int_{\lambda_1}^{\lambda_2}t^{\alpha-1}e^{-t}dt\\
+&=\alpha\Gamma(\alpha)
+\end{align*}
+\end{2qs1}
+
+
+\begin{2qs1}
+Remarquons que $\Gamma(1)=\int_{\R_+}e^{-t}=1$.\newline
+Or, pour tout $\alpha \in \R_+, \Gamma(\alpha+1)=\alpha\Gamma(\alpha)$. Donc, en particulier $\forall n\in\N, \Gamma(n+1) = n\Gamma(n)$. \newline
+Par une simple récurrence on obtient donc que $\Gamma(n+1)=n!$
+\end{2qs1}
+
+\begin{2qs1}
+\begin{align*}
+\Gamma(1/2) &= \int_{\R_+}e^{-t}\sqrt{t}dt\\
+&\text{changement de variable: on pose $u=\sqrt{t}$, donc $t=u^2$ et $dt=2udu$}\\
+&=\int_{\R_+}e^{-u^2}\frac{2u}{u}du\\
+&= 2\int_{\R_+}e^{-u^2}du \text{  (intégrale de Gauss)}\\
+&=2.\frac{\sqrt{\pi}}{2}\\
+&= \sqrt{\pi}
+\end{align*}
+\end{2qs1}
+\end{2q}
+%%%
+
+\begin{2q}
+
+\begin{2qs2}
+Soit $\displaystyle f_X(x)=\1_{\R_+}(x)\frac{1}{\Gamma(\alpha)\beta^\alpha}x^{\alpha-1}e^{-x/\beta}$. Par définition, $f_X(x) >0$, il suffit donc de montrer que $\int_\R f_X(x)dx =1$
+\begin{align*}
+\int_\R f_X(x)dx &= \int_\R\1_{\R_+}(x)\frac{1}{\Gamma(\alpha)\beta^\alpha}x^{\alpha-1}e^{-x/\beta}dx \\
+& \text{On pose $u=x/\beta$, donc $x=u\beta$ et $dx=\beta du$}\\
+&=\frac{1}{\Gamma(\alpha)\beta^\alpha} \int_{\R_+}\beta(\beta u)^{\alpha-1}e^{-u}du\\
+&= \frac{\beta^{\alpha}}{\Gamma(\alpha)\beta^\alpha} \int_{\R_+}u^{\alpha-1}e^{-u}du\\
+&=\frac{\Gamma(\alpha)}{\Gamma(\alpha)}\\
+&= 1
+\end{align*}
+$f_X(x)$ est donc bien une densité de probabilité.
+\end{2qs2}
+
+\begin{2qs2}
+\begin{align*}
+M_X(t) &= \E(e^{tX})\\
+&= \int_\R e^{tx}f_X(x)dx\\
+&=\int_{\R_+}e^{tx}\frac{1}{\Gamma(\alpha)\beta^\alpha}x^{\alpha-1}e^{-x/\beta}dx\\
+&=\int_{\R_+}e^{-x(-t+1/\beta)}\frac{1}{\Gamma(\alpha)\beta^\alpha}x^{\alpha-1}dx\\
+&\text{On pose $u=x(1/\beta -t)$, donc $x=\frac{u}{1/\beta-t}$ et $dx =\frac{du}{1/\beta -t}$}\\
+&= \int_{\R_+}e^{-u}\frac{1}{\Gamma(\alpha)\beta^\alpha}u^{\alpha-1}\frac{1}{(1/\beta-t)^{\alpha-1}}\frac{1}{1/\beta - t}du\\
+&= \frac{1}{(1/\beta-t)^\alpha}\frac{1}{\Gamma(\alpha)\beta^\alpha}\int_{\R_+}e^{-u}u^{\alpha-1}du\\
+&= \frac{1}{(1-t\beta)^\alpha}
+\end{align*}
+\end{2qs2}
+
+\begin{2qs2}
+On a
+\begin{center}$M_X^{'}(t) = \alpha\beta(1-\beta.t)^{-1-\alpha}$.\end{center}
+et
+\begin{center} $M_X^{''}(t) = \alpha\beta^2(1+\alpha)(1-\beta.t)^{-\alpha-2}$\end{center}
+Or, $\E(X) = M_X^{'}(0)$ et $\E(X^2) = M_X^{''}(0)$.\newline
+On obtient donc $\E(X) = \alpha\beta$ et \newline
+ $V(X) = \E(X^2) - \E(X)^2 = \alpha\beta^2 + \alpha^2\beta^2 - \alpha^2\beta^2 = \alpha\beta^2$.
+\end{2qs2}
+
+\begin{2qs2}
+Soient $X_1, \ldots X_m$ telles que $X_k \sim \Nc(\mu, \sigma^2)$. Soit $S_n^2 = \displaystyle\frac{\sum(X_k - \overline{X_n})^2}{n}$.\newline
+D'après le cours, on a que $\displaystyle n\frac{S_n^2}{\sigma^2} \sim \chi^2(n-1)$.\newline
+Posons $\displaystyle Y:=\frac{nS_n^2}{\sigma^2}$, donc $Y\sim\chi^2(n-1)$ et $S_n^2=\frac{Y\sigma^2}{n}$. \newline
+Calculons la densité de $\displaystyle\frac{Y\sigma^2}{n}$. \newline
+Considérons pour cela $\phi :\R \longrightarrow\R$ borélienne et calculons $\E(\phi(\frac{Y\sigma^2}{n}))$;
+\begin{align*}
+\E(\phi(\frac{Y\sigma^2}{n})) &= \int_{\Omega}\phi(\frac{Y\sigma^2}{n})d\Prob\\
+&= \int_{\R}\phi(\frac{y\sigma^2}{n})d\Prob_Y\\
+&=\displaystyle \int_{\R_+}\phi(\frac{y\sigma^2}{n}) (\frac{1}{2})^{ \frac{n-1}{2}}\frac{1}{\Gamma( \frac{n-1}{2})}y^{ \frac{n-1}{2} -1}e^{-y/2}dy\\
+& \text{On pose $u=\frac{y\sigma^2}{n}$ donc $y=\frac{un}{\sigma^2}$ et $dy=\frac{ndu}{\sigma^2}$}\\
+&= \displaystyle \int_{\R_+}\phi(u) (\frac{1}{2})^{ \frac{n-1}{2}}\frac{1}{\Gamma( \frac{n-1}{2})}(\frac{nu}{\sigma^2})^{ \frac{n-1}{2} -1}e^{-un/(2\sigma^2)}\frac{n}{\sigma^2}dy\\
+\end{align*}
+Or, $\displaystyle\left(\frac{1}{2}\right)^{ \frac{n-1}{2}}(\frac{n}{\sigma^2})^{ \frac{n-1}{2} -1}\frac{n}{\sigma^2} = (\frac{n}{2\sigma^2})^{ \frac{n-1}{2}}$.\newline
+Finalement, on obtient que
+\begin{align*}
+\E(\phi(\frac{Y\sigma^2}{n})) &= \displaystyle \int_{\R}\phi(u)\frac{1}{\Gamma( \frac{n-1}{2})}u^{ \frac{n-1}{2} -1}e^{-un/(2\sigma^2)}(\frac{n}{2\sigma^2})^{ \frac{n-1}{2}}dy\\
+&= \displaystyle \int_{\R}\phi(u)\frac{1}{\Gamma( \frac{n-1}{2})}u^{ \frac{n-1}{2} -1}e^{-u/\frac{2\sigma^2}{n}}\left(\frac{1}{\frac{2\sigma^2}{n}}\right)^{ \frac{n-1}{2}}dy
+\end{align*}
+La densité de $S_n^2$ est donc
+\begin{center}$\displaystyle f_{S_n^2}(u)=\frac{1}{\Gamma( \frac{n-1}{2})}u^{ \frac{n-1}{2} -1}e^{-u/\frac{2\sigma^2}{n}}\left(\frac{1}{\frac{2\sigma^2}{n}}\right)^{ \frac{n-1}{2}}$\end{center}
+Et de ce fait, $Y\sim \Gamma( \frac{n-1}{2}, \frac{2\sigma^2}{n})$
+\end{2qs2}
+\end{2q}
+%%%
+
+
+\begin{2q}
+
+
+\begin{2qs3}
+Soient $r_1, \ldots r_n \in \N^*$ et soient $Y_1, \ldots Y_n$ indépendantes telles que $Y_k \sim \chi^2(r_k)$, i.e. $Y_k\sim \Gamma(r_k/2, 2)$. \newline
+Soit $M_{\sum Y_k}$ la fonction génératrice de $\displaystyle\sum_{i=1}^n Y_k$. Déterminons la loi de $\sum_{i=1}^n Y_k$.
+\begin{align*}
+M_{\sum Y_k}(t)&= \E(e^{t\sum_{i=1}^n Y_k})\\
+&= \E(\prod_{i=1}^n e^{tY_k})\\
+&= \prod_{i=1}^n\E(e^{tY_k}) \text{  par indépendance}\\
+&= \prod_{i=1}^n(1-t)^{-r_k/2} \text{  par 2)ii)}\\
+&= (1-2t)^{-\sum_{i=1}^n r_k/2}
+\end{align*}
+Or, la fonction génératrice caractérise la loi, donc
+\begin{center} $\displaystyle\sum_{i=1}^n Y_k\sim \Gamma\left(\sum r_k/2,2\right)$, i.e. $\displaystyle\sum_{i=1}^n Y_k\sim \chi^2\left(\sum_{i=1}^n r_k\right)$\end{center}
+\end{2qs3}
+
+\begin{2qs3}
+Soit $Z\sim \Nc(0,1)$, et soit $\phi$ borélienne, calculons la densité de $Z^2$
+\begin{align*}
+\E(\phi(Z^2)) &= \int_{\Omega}\phi(Z^2)d\Prob \\
+&=  \int_{\R}\phi (z^2)dP_Z \\
+&=  \int_{\R}\phi(z^2)\frac{1}{\sqrt{2\pi}}e^{-z^2/2}dz\\
+&= 2\int_{\R_+}\phi(z^2)\frac{1}{\sqrt{2\pi}}e^{-z^2/2}dz \text{  car fonction paire}\\
+&\text{changement de variable: on pose $x=z^2$, donc $z=\sqrt{x}$ et $dx = \frac{dz}{2\sqrt{x}}$}\\
+&= 2\int_{\R_+}\phi(x)\frac{1}{\sqrt{2\pi}}\frac{1}{2\sqrt{x}}e^{-x/2}dx\\
+&= \int_{\R_+}\phi(x)\frac{1}{\sqrt{2\pi}}\frac{1}{\sqrt{x}}e^{-x/2}dx\\
+&= \int_{\R_+}\phi(x)\frac{1}{\sqrt{2}.\Gamma(1/2)}x^{1/2-1}e^{-x/2}dx\text{  car $\Gamma(1/2)=\sqrt{\pi}$}\\
+\end{align*}
+donc $Z^2$ admet pour densité
+\begin{center} $\displaystyle\1_{\R_+}(x)\frac{1}{\sqrt{2}.\Gamma(1/2)}x^{1/2-1}e^{-x/2}$\end{center}
+donc $Z^2 \sim \Gamma(1/2,2)$, i.e. $Z^2\sim \chi^2(1)$.\newline
+On en déduit que si $X_1, \ldots X_n$ sont telles que $X_k\sim\Nc(0,1)\forall k =1\ldots n$, alors les $X_k^2$ suivent une $\chi^2(1)$.\newline
+Donc, de par 3)i), $\displaystyle\sum X_k^2 \sim \chi^2\left(\sum_{k=1}^r 1\right)$, i.e.$\displaystyle\sum X_k^2 \sim \chi^2(r)$
+\end{2qs3}
+
+\begin{2qs3}
+Soit $(Y_n)$ telle que $Y_n\sim \chi^2(n)$. Soit $Z\sim\Nc(0,1)$.\newline
+De par la question 2), on peut poser $Y_n = \displaystyle\sum_{i=1}^nX_i$, où les $X_i\sim \chi^2(1)$.\newline
+De plus, par 2)iii), on obtient que $\mu:=\E(X_i)=1$ et $\sigma^2 := V(X_i)=2$.\newline
+Finalement, on obtient que 
+\begin{center}$\displaystyle \frac{Y_n - n}{\sqrt{2n}} = \frac{\sum_{i=1}^n X_i - n\mu}{\sigma\sqrt{n}}\longrightarrow Z$ en loi\end{center}
+de par le théorème central limite.
+\end{2qs3}
+\end{2q}
+
+
+\begin{2q}
+
+\begin{2qs4}
+Soient $Z\sim\Nc(0,1)$ et $Y\sim\chi^2(r)$ indépendantes. Donc $X:=\displaystyle\frac{\sqrt{r}Z}{\sqrt{Y}}$ et $Y$ sont indépendantes. Voyons si le vecteur $(X,Y)$ admet une densité. Pour cela, considérons $\phi$ et $\psi$ boréliennes.
+\begin{align*}
+\E(\phi(X)\psi(Y)) &=\displaystyle \int_{\Omega}\phi(\frac{\sqrt{r}Z}{\sqrt{Y}})\psi(Y)d\Prob\\
+&=\displaystyle \int_{\R^2}\phi(\frac{\sqrt{r}z}{\sqrt{y}})\psi(y)d\Prob_{(Y,Z)}\\
+&=\displaystyle \int_{\R^2}\phi(\frac{\sqrt{rz}}{\sqrt{y}})\psi(y)d\Prob_Yd\Prob_Z \text{  par indépendance}\\
+&=\displaystyle \int_{\R^2}\phi(\frac{\sqrt{r}z}{\sqrt{y}})\psi(y)\1_{\R_+}(y)\frac{1}{\sqrt{2\pi}}e^{-z^2/2}\frac{( \frac{1}{2})^{ \frac{r}{2}}}{\Gamma( \frac{r}{2})}y^{ \frac{r}{2} - 1}e^{-y/2}dydz\\
+& \text{Changement de variable, on pose $x=\frac{\sqrt{r}z}{\sqrt{y}}$, donc $z=\frac{x\sqrt{y}}{\sqrt{r}}$ et $dz =\frac{dx\sqrt{y}}{\sqrt{r}}$}\\
+&=\displaystyle \int_{\R^2}\phi(x)\psi(y)\1_{\R_+}(y)\frac{1}{\sqrt{2\pi}}e^{\frac{-x^2.y}{2r}}\frac{( \frac{1}{2})^{ \frac{r}{2}}}{\Gamma( \frac{r}{2})}y^{ \frac{r}{2} - 1}e^{-y/2}\frac{\sqrt{y}}{\sqrt{r}}dydx\\
+&=\displaystyle \int_{\R^2}\phi(x)\psi(y)\1_{\R_+}(y)\frac{1}{\sqrt{2r\pi}}e^{\frac{-y}{2}(1+x^2/r)}\frac{( \frac{1}{2})^{ \frac{r}{2}}}{\Gamma( \frac{r}{2})}y^{(r-1)/2}dydx\\
+\end{align*}
+La densité jointe de $(X,Y)$ est donc
+\begin{center} $\displaystyle f_{(X,Y)} = \1_{\R_+}(y)\frac{1}{\sqrt{2r\pi}}e^{\frac{-y}{2}(1+x^2/r)}\frac{(\frac{1}{2})^{\frac{r}{2}}}{\Gamma(\frac{r}{2})}y^{(r-1)/2}$\end{center}
+et donc $(X,Y)$ est absolument continue.
+\end{2qs4}
+
+\begin{2qs4}
+Par i) on a, 
+\begin{center} $f_{(X,Y)} = \1_{\R_+}(y)\frac{1}{\sqrt{2r\pi}}e^{\frac{-y}{2}(1+x^2/r)}\frac{(1/2)^{r/2}}{\Gamma(r/2)}y^{ \frac{r-1}{2}}$\end{center}
+Or, la loi marginale de $X$ nous est donnée par
+\begin{center}$ f_X(x) = \int_\R f_{(X,Y)}dy$\end{center}
+\begin{align*}
+f_X(x) &=  \int_\R \1_{\R_+}(y)\frac{1}{\sqrt{2r\pi}}e^{\frac{-y}{2}(1+x^2/r)}\frac{(\frac{1}{2})^{\frac{r}{2}}}{\Gamma(\frac{r}{2})}y^{ \frac{r-1}{2}} dy\\
+&\text{changement de variable: on pose $z=\frac{y(1+x^2/r)}{2}$ donc $y=\frac{2z}{1+x^2/r}$ et $dy = \frac{2dz}{1+x^2/r}$}\\
+&= \int_\R \1_{\R_+}(z)\frac{1}{\sqrt{2r\pi}}e^{-z}\frac{(\frac{1}{2})^{\frac{r}{2}}}{\Gamma(\frac{r}{2})}(\frac{2z}{1+x^2/r})^{ \frac{r-1}{2}} \frac{2}{1+x^2/r}dz\\
+&= \frac{1}{\sqrt{r\pi}}\frac{1}{\Gamma(\frac{r}{2})}\frac{1}{1+x^2/r}\left(\frac{1}{1+x^2/r}\right)^{ \frac{r-1}{2}}\int_\R \1_{\R_+}(z)e^{-z}z^{ \frac{r-1}{2}} \frac{2^{ \frac{r-1}{2}}}{\sqrt{2}}.2.(\frac{1}{2})^{\frac{r}{2}}dz\\
+\end{align*}
+Or, $\displaystyle\frac{r-1}{2}=\frac{r+1-2}{2}=\frac{r+1}{2}-1$ et $\displaystyle\frac{2^{ \frac{r-1}{2}}}{\sqrt{2}}.2.(\frac{1}{2})^{\frac{r}{2}}=1$ donc
+\begin{center}$\displaystyle\int_\R \1_{\R_+}(z)e^{-z}z^{ \frac{r-1}{2}} \frac{2^{ \frac{r-1}{2}}}{\sqrt{2}}.2.(\frac{1}{2})^{\frac{r}{2}}dz =\displaystyle\int_\R \1_{\R_+}(z)e^{-z}z^{ \frac{r+1}{2}-1} dz = \Gamma(\frac{r+1}{2}) $\end{center}
+Enfin, nous obtenons que 
+\begin{center} $f_X(x) = \displaystyle\frac{\Gamma((r+1)/2)}{\sqrt{r\pi}\Gamma(\frac{r}{2})}\left(\frac{1}{1+x^2/r}\right)^{(r+1)/2}$\end{center}
+Pour $r=1$, la densité est
+\begin{center}$f_X(x) =  \displaystyle\frac{\Gamma(1)}{\sqrt{\pi}\Gamma(\frac{1}{2})}\frac{1}{1+x^2}$ \end{center}
+\begin{center}$=\displaystyle\frac{1}{\pi}\frac{1}{1+x^2}$ \end{center}
+On retrouve donc une Cauchy $\Cc(0,1)$.
+\end{2qs4}
+
+\begin{2qs4}
+\end{2qs4}
+
+\begin{2qs4}
+\end{2qs4}
+
+
+\end{2q}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagebreak
+
+\section{Problème 3}
+
+\begin{3q}
+Soient $X,Y$ absolument continues et indépendantes telles que $\Prob(X>0,Y>0)=1$. On a $\Prob(X>0,Y>0)=\Prob(X>0).\Prob(Y>0)=1$.\newline
+ Donc $\Prob(X>0)=\Prob(Y>0)=1$. De plus, $P(Y=0)=0$ donc $Z := X/Y$ est bien définie. Voyons si $Z$ admet une densité. Soit $\phi$ borélienne, étudions $\E(\phi(Z))$.
+	\begin{align*}
+ \E(\phi(Z)) &= \E(\phi(X/Y))\\
+&=\int_{\Omega} \phi(X/Y)d\Prob\\
+&= \int_{\R^2}\phi(x/y)d\Prob_{(x,y)}\\
+&= \int_{\R^2}\phi(x/y)d\Prob xd\Prob y\\
+&= \int_{\R^2}\phi(x/y)\1_{\R_+}(x)\1_{\R_+}(y)f_X(x)f_Y(y)dxdy\\
+&\text{Changement de variable: on pose $z = x/y$; d'ou $x=yz$ et $dx=y.dz$}\\
+&= \int_{\R^2}\phi(z)\1_{\R_+}(yz)\1_{\R_+}(y)f_X(yz)f_Y(y)ydzdy\\
+&=\int_{\R}\phi(z)\left(\int_{\R}\1_{\R_+}(y)\1_{\R_+}(z)f_X(yz)f_Y(y)ydy\right)dz
+	\end{align*}
+car $x,y>0$ donc $yz>0$. \newline
+$Z=X/Y$ est donc absolument continue de densité 
+ \begin{center}$\int_{\R}\1_{\R_+}(z)\1_{\R_+}(z)f_X(yz)f_Y(y)ydy$ \end{center}
+\end{3q}
+
+\begin{3q}
+Soit $Z := \displaystyle\frac{X/m}{Y/n}$, où $X\sim \chi^2(m), Y\sim\chi^2(n)$. \newline
+Calculons les lois de $X/m$ et $Y/m$. Soit $\phi$ borélienne. \newline
+\begin{align*}
+\E(\phi(X/m)) &= \int_{\Omega}\phi(X/m)d\Prob \\
+&= \int_\R \phi(x/m)d\Prob x\\
+&= \int_\R  \phi(x/m) \frac{(1/2)^{\frac{m}{2}}}{\Gamma(\frac{m}{2})}x^{\frac{m}{2} - 1}e^{-x/2}\1_{\R_+}(x)dx\\
+& \text{On pose $z = x/m$, d'où $x=mz$ et $dx = mdz$ }\\
+&= \int_\R  \phi(z) \frac{(1/2)^{\frac{m}{2}}}{\Gamma(\frac{m}{2})}(mz)^{\frac{m}{2} - 1}e^{-z\frac{m}{2}}m\1_{\R_+}(z)dz\\
+&= \int_\R  \phi(z) \frac{(1/2)^{\frac{m}{2}}}{\Gamma(\frac{m}{2})}z^{\frac{m}{2}-1}e^{-z\frac{m}{2}}.m.m^{\frac{m}{2} -1}\1_{\R_+}(z)dz\\
+&= \int_\R  \phi(z) \frac{(\frac{m}{2})^{\frac{m}{2}}}{\Gamma(\frac{m}{2})}z^{\frac{m}{2}-1}e^{-z\frac{m}{2}}\1_{\R_+}(z)dz
+\end{align*}
+On en déduit donc que $X/m$ est absolument continue, de densité
+\begin{center} $\displaystyle\1_{\R_+}(z)\frac{(\frac{m}{2})^{\frac{m}{2}}}{\Gamma(\frac{m}{2})}z^{\frac{m}{2}-1}e^{-z\frac{m}{2}} $\end{center}
+Donc $X\sim \Gamma(\frac{m}{2}, \frac{2}{m})$. \newline
+Par un raisonnement similaire, on obtient que $Y\sim\Gamma(\frac{n}{2},\frac{2}{n})$.\newline
+De par i), $\frac{X/m}{Y/n}$ est absolument continue de densité 
+ \begin{align*}
+f_Z(z) &= \int_{\R}\1_{\R_+}(z)\1_{\R_+}(y)f_X(yz)f_Y(y)ydy \\
+&= \int_{\R_+} \frac{(\frac{m}{2})^{\frac{m}{2}}}{\Gamma(\frac{m}{2})}(zy)^{\frac{m}{2}-1}e^{-zy\frac{m}{2}}.\frac{(\frac{n}{2})^{\frac{n}{2}}}{\Gamma(\frac{n}{2})}y^{\frac{n}{2}-1}e^{-y\frac{n}{2}}y.\1_{\R_+}(z)dy\\
+&= \frac{(\frac{m}{2})^{\frac{m}{2}}}{\Gamma(\frac{m}{2})} \frac{(\frac{n}{2})^{\frac{n}{2}}}{\Gamma(\frac{n}{2})} z^{\frac{m}{2}-1}\1_{\R_+}(z)\int_{\R_+} y^{\frac{m+n}{2}-1}e^{-y(zm+n)/2}dy\\
+& \text{On pose $u = y(\frac{zm+n}{2})$, d'où $dy = \frac{2du}{zm+n}$}\\
+&= \frac{(\frac{m}{2})^{\frac{m}{2}}}{\Gamma(\frac{m}{2})} \frac{(\frac{n}{2})^{\frac{n}{2}}}{\Gamma(\frac{n}{2})} z^{\frac{m}{2}-1}\1_{\R_+}(z)\int_{\R_+} (\frac{2}{zm+n})^{\frac{m+n}{2}}u^{\frac{m+n}{2}-1}e^{-u}du\\
+&= \frac{(\frac{m}{2})^{\frac{m}{2}}}{\Gamma(\frac{m}{2})} \frac{(\frac{n}{2})^{\frac{n}{2}}}{\Gamma(\frac{n}{2})} z^{\frac{m}{2}-1}\1_{\R_+}(z)(\frac{2}{zm+n})^{\frac{m+n}{2}}\int_{\R_+} u^{\frac{m+n}{2}-1}e^{-u}du\\
+&= \frac{(\frac{m}{2})^{\frac{m}{2}}}{\Gamma(\frac{m}{2})} \frac{(\frac{n}{2})^{\frac{n}{2}}}{\Gamma(\frac{n}{2})} z^{\frac{m}{2}-1}\1_{\R_+}(z)(\frac{2}{zm+n})^{\frac{m+n}{2}}\Gamma(\frac{m+n}{2})\\
+&= \displaystyle\frac{1}{\beta(\frac{m}{2}, \frac{n}{2})}m^{\frac{m}{2}}n^{\frac{n}{2}}(1/2)^{\frac{m+n}{2}}2^{\frac{m+n}{2}}z^{\frac{m}{2}-1}\1_{\R_+}(z)\frac{1}{(zm+n)^{\frac{m+n}{2}}}\\
+&= \displaystyle\frac{1}{\beta(\frac{m}{2}, \frac{n}{2})}m^{\frac{m}{2}}n^{\frac{n}{2}}z^{\frac{m}{2}-1}\1_{\R_+}(z)\frac{1}{(n(z\frac{m}{n}+1))^{\frac{m+n}{2}}}\\
+&= \displaystyle\frac{1}{\beta(\frac{m}{2}, \frac{n}{2})}m^{\frac{m}{2}}n^{\frac{n}{2}}z^{\frac{m}{2}-1}\1_{\R_+}(z)\frac{1}{(z\frac{m}{n}+1)^{\frac{m+n}{2}}}\frac{1}{n^{\frac{m+n}{2}}}\\
+&= \displaystyle\frac{1}{\beta(\frac{m}{2}, \frac{n}{2})}(\frac{m}{n})^{\frac{m}{2}}z^{\frac{m}{2}-1}\1_{\R_+}(z)\frac{1}{(z\frac{m}{n}+1)^{\frac{m+n}{2}}}
+\end{align*}
+car $\displaystyle\frac{m^{\frac{m}{2}}n^{\frac{n}{2}}}{n^{\frac{m+n}{2}}}=m^{\frac{m}{2}}.n^{\frac{n}{2} - (-m-n)/2} = (\frac{m}{n})^{\frac{m}{2}}$.\newline
+Finalement, 
+\begin{center}$f_Z(z) = \1_{\R_+}(z)\displaystyle\frac{1}{\beta(\frac{m}{2}, \frac{n}{2})}(\frac{m}{n})^{\frac{m}{2}}\frac{1}{(z\frac{m}{n}+1)^{\frac{m+n}{2}}}z^{\frac{m}{2}-1}$ \end{center}
+\end{3q}
+
+\begin{3q}
+
+\end{3q}
+
+\begin{3q}
+Soit $T\sim T(n)$, calculons la densité de $T^2$, pour cela donnons nous une fonction $\phi$ borélienne quelconque.
+\begin{align*}
+\E(\phi(T^2)) &= \int_{\Omega}\phi(T^2)d\Prob \\
+&= \int_\R\phi(t^2)d\Prob T \\
+&= \displaystyle \int_\R\phi(t^2)\frac{\Gamma(\frac{n+1}{2})}{\sqrt{n\pi}\Gamma(\frac{n}{2})}\frac{1}{(1+t^2/n)^{(n+1)/2}}dt\\
+& \text{Or, $t \longrightarrow t^2$ est paire, donc}\\
+&= 2\displaystyle \int_{\R_+}\phi(t^2)\frac{\Gamma(\frac{n+1}{2})}{\sqrt{n\pi}\Gamma(\frac{n}{2})}\frac{1}{(1+t^2/n)^{(n+1)/2}}dt\\
+& \text{changement de variable, on pose $u=t^2$, d'où $t=\sqrt{u}$ et $dt = \frac{du}{2\sqrt{u}}$}\\
+&= 2\displaystyle \int_{\R_+}\phi(u)\frac{\Gamma(\frac{n+1}{2})}{\sqrt{n\pi}\Gamma(\frac{n}{2})}\frac{1}{(1+u/n)^{(n+1)/2}}\frac{1}{2\sqrt{u}}du\\
+& \text{Or, $\sqrt{\pi}=\Gamma(1/2)$}\\
+&=\displaystyle \int_{\R_+}\phi(u)\frac{\Gamma(\frac{n+1}{2})}{\Gamma(1/2)\Gamma(\frac{n}{2})}\frac{1}{(1+u/n)^{(n+1)/2}}u^{-1/2}(\frac{1}{n})^{1/2}du\\
+&=\displaystyle \int_{\R}\phi(u)\frac{1}{\beta(1/2,\frac{n}{2})}\frac{1}{(1+u/n)^{(n+1)/2}}u^{1/2-1}(\frac{1}{n})^{1/2}\1_{\R_+}(u)du\\
+\end{align*}
+Donc $T^2$ et absolument continue, de densité
+\begin{center}$\displaystyle f_Z(z) = \1_{\R_+}(t)\frac{1}{\beta(1/2,\frac{n}{2})}\frac{1}{(1+t/n)^{(n+1)/2}}t^{1/2-1}(\frac{1}{n})^{1/2}$\end{center}
+Donc $T^2 \sim F(1,n)$
+\end{3q}
+
+\begin{3q}
+Soit $X \sim F(m,n)$ , $\Prob(X=0)=0$ donc $1/X$ est bien définie.
+\begin{align*}
+\E(\phi(1/X)) &= \int_{\Omega}\phi(1/X)d\Prob \\
+ &= \int_{\R}\phi(1/x)d\Prob x \\
+ &= \displaystyle\int_\R \phi(1/x)\frac{(\frac{m}{n})^{\frac{m}{2}}}{\beta(\frac{m}{2}, \frac{n}{2})}\frac{x^{\frac{m}{2}-1}}{(1+mx/n)^{\frac{m+n}{2}}}\1_{\R_+}(x)dx\\
+ &\text{On pose $z=1/x$ donc $x=1/z$ et $dx=-dz/z^2$}\\
+ &= -\displaystyle\int_{\R_+}\phi(z)\frac{(\frac{m}{n})^{\frac{m}{2}}}{\beta(\frac{m}{2}, \frac{n}{2})}\left(\frac{1}{z}\right)^{\frac{m}{2} -1}\frac{1}{(1+m/zn)^{\frac{m+n}{2}}}\frac{dz}{-z^2}\\
+ \end{align*} 
+ \begin{align*}
+ \text{Or, $\beta(\frac{m}{2}, \frac{n}{2}) = \displaystyle\frac{\Gamma(\frac{m}{2})\Gamma(\frac{n}{2})}{\Gamma(\frac{m}{2}+\frac{n}{2})} = \displaystyle\frac{\Gamma(\frac{n}{2})\Gamma(\frac{m}{2})}{\Gamma(\frac{n}{2}+\frac{m}{2})} = \beta(\frac{n}{2}, \frac{m}{2})$}\\
+ \end{align*}
+ Et
+ \begin{align*}
+ & (\frac{m}{n})^{\frac{m}{2}}\left(\frac{1}{z}\right)^{\frac{m}{2} -1}\frac{1}{(1+m/zn)^{\frac{m+n}{2}}}\frac{1}{z^2}\\
+ &=(\frac{m}{n})^{\frac{m}{2}} \left(\frac{1}{z}\right)^{\frac{m}{2}+1}\left(\frac{1}{(nz+m)/nz}\right)^{\frac{m+n}{2}}\\
+ &= (\frac{m}{n})^{\frac{m}{2}}n^{\frac{m+n}{2}} \left(\frac{1}{z}\right)^{\frac{m}{2}+1}z^{\frac{m+n}{2}}\left(\frac{1}{m(1+zn/m)}\right)^{\frac{m+n}{2}}\\
+ &= (\frac{m}{n})^{\frac{m}{2}}n^{\frac{m+n}{2}} \left(\frac{1}{m}\right)^{\frac{m+n}{2}}z^{\frac{m+n}{2}-\frac{m}{2} -1}\left(\frac{1}{1+zn/m}\right)^{\frac{m+n}{2}}\\
+ &= \left(n/m\right)^{\frac{m+n}{2}-\frac{m}{2}}z^{\frac{n}{2}-1}\left(\frac{1}{1+zn/m}\right)^{\frac{m+n}{2}}\\
+ &= \left(n/m\right)^{\frac{n}{2}}z^{\frac{n}{2}-1}\left(\frac{1}{1+zn/m}\right)^{\frac{m+n}{2}}\\
+\end{align*}
+Finalement, 
+\begin{center} $\E(\phi(1/X)) = \displaystyle\int_\R\1_{\R_+}(z)\left(n/m\right)^{\frac{n}{2}}z^{\frac{n}{2}-1}\left(\frac{1}{1+zn/m}\right)^{\frac{m+n}{2}}\frac{1}{\beta(\frac{n}{2},\frac{m}{2})}dz$\end{center}
+On en déduit que $1/X \sim F(n,m)$
+\end{3q}
+
+\begin{3q}
+Soient $X_1, \ldots X_m$ telles que $X_k \sim \Nc(\mu_X, \sigma_X^2)$ et $Y_1, \ldots Y_n$ telles que $Y_l \sim \Nc(\mu_Y, \sigma_Y^2)$ pour $k\in\llbracket1,m\rrbracket$ et $l\in\llbracket1,n\rrbracket$. \newline
+Soit $\alpha \in ]0,1[$, on va construire un intervalle de confiance au niveau $1-\alpha$ de $\frac{\sigma_X^2}{\sigma_Y^2}$.\newline
+Notons $S_{m,X}^2 = \displaystyle\sum_{k=0}^m X_k - \overline{X_m}^2$; où $\overline{X_m} = \displaystyle\sum\frac{X_k}{m}$ et\newline
+$S_{m,Y}^2 = \displaystyle\sum_{l=0}^n Y_l - \overline{Y_n}^2$; où $\overline{Y_n} = \displaystyle\sum\frac{Y_l}{n}$\newline
+D'après le cours, cf page 83, on a que 
+\begin{center} $\displaystyle\frac{mS_{m,X}^2}{\sigma_X^2}\sim\chi^2(m-1)$\end{center}
+et
+\begin{center} $\displaystyle\frac{nS_{n,Y}^2}{\sigma_Y^2}\sim\chi^2(n-1)$\end{center}
+or, de par la question ii), on a 
+\begin{center} $\displaystyle\frac{\chi^2(m-1)/(m-1)}{\chi^2(n-1)/(n-1)}\sim F(m-1, n-1)$\end{center}
+donc 
+\begin{center}$\displaystyle\frac{\frac{m}{m-1}S_{m,X}^2\frac{1}{\sigma_X^2}}{\frac{n}{n-1}S_{n,Y}^2\frac{1}{\sigma_Y^2}}\sim F(m-1,n-1)$\end{center}
+Maintenant, \newline
+Soient $f_{\alpha_1}, f_{\alpha_2}$ tels que 
+\begin{center}$\Prob(f_{\alpha_1}\le F \le f_{\alpha_2})=1-\alpha$\end{center}
+où $F\sim F(m-1, n-1)$. On obtient donc sous ces notations et conditions que 
+\begin{center}$\Prob\left(f_{\alpha_1}\le \displaystyle\frac{\frac{m}{m-1}S_{m,X}^2\frac{1}{\sigma_X^2}}{\frac{n}{n-1}S_{n,Y}^2\frac{1}{\sigma_Y^2}} \le f_{\alpha_2}\right) = 1-\alpha$ \end{center}
+d'où
+\begin{center} $\displaystyle\Prob\left(\frac{f_{\alpha_1}\frac{n}{n-1}S_{n,Y}^2}{\frac{m}{m-1}S_{m,X}^2} \le \frac{\sigma_Y^2}{\sigma_X^2}\le \frac{f_{\alpha_2}\frac{n}{n-1}S_{n,Y}^2}{\frac{m}{m-1}S_{m,X}^2} \right) = 1-\alpha$ \end{center}
+et donc
+\begin{center} $\displaystyle\Prob\left(\frac{\frac{m}{m-1}S_{m,X}^2}{f_{\alpha_1}\frac{n}{n-1}S_{n,Y}^2} \ge \frac{\sigma_X^2}{\sigma_Y^2}\ge \frac{\frac{m}{m-1}S_{m,X}^2}{f_{\alpha_2}\frac{n}{n-1}S_{n,Y}^2} \right) = 1-\alpha$ \end{center}
+Un intervalle de confiance au niveau $1-\alpha$ de $\displaystyle \frac{\sigma_X^2}{\sigma_Y^2}$ est donc 
+\begin{center} $\displaystyle\left[\frac{\frac{m}{m-1}S_{m,X}^2}{f_{\alpha_2}\frac{n}{n-1}S_{n,Y}^2}, \frac{\frac{m}{m-1}S_{m,X}^2}{f_{\alpha_1}\frac{n}{n-1}S_{n,Y}^2}\right]$\end{center}
+\end{3q}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Problème 4}
+
+Soit $X$ une v.a. de carré intégrable dépendant d'un paramètre $\theta\in\Theta\subseteq \R^p$.  \newline
+Soient $X_1,\ldots,X_n$ un échantillon iid de même loi de $X$.\newline
+Soit $g:\Theta\longrightarrow\R$.
+
+
+\begin{4q}
+\begin{align*}
+RQM(\gn) &= \E[(\gn - g(\theta))^2]\\
+&= \E[\gn^2-2\gn g(\theta)+g(\theta)^2]\\
+&= \E[\gn^2+\E(\gn)^2-\E(\gn)^2-2\gn g(\theta)+g(\theta)^2]\\
+&= \E(\gn^2) + \E(\E(\gn)^2) - \E(\E(\gn)^2) - \E(2\gn g(\theta)) + \E(g(\theta)^2)\\
+&= \E(\gn^2) - \E(\gn)^2 + \E(\gn)^2 - 2g(\theta)\E(\gn) + \E(g(\theta)^2)\\
+&= \V(\gn) + [\E(\gn)-g(\theta)]^2
+\end{align*}
+\end{4q}
+
+
+
+
+\begin{4q}
+Soit $\Xn = \displaystyle\sum_{i=0}^n\frac{X_i}{n}$
+\begin{4qs2}
+Les $X_i$ sont par hypothèse de carrés intégrables, donc, de par la loi des grands nombres, on a
+\begin{center}$\Xn =  \displaystyle\sum_{i=0}^n\frac{X_i}{n} \longrightarrow \E(X_1)=\E(X)=\mu$ en loi\end{center}
+$\Xn$ est donc par définition consistant.
+\end{4qs2}
+
+\begin{4qs2}
+\begin{align*}
+RQM(\Xn) &=  \V(\Xn) + [\E(\Xn)-\mu]^2\\
+&=  \V(\Xn) + \E(\Xn)^2 -2\mu\E(\Xn) + \mu^2\\
+\end{align*}
+On sait par hypothèse que les $X_i$ sont indépendantes, leur covariance est donc nulle. Ceci nous permet d'obtenir une expression simple de la variance de $\Xn$:
+\begin{align*}
+\V(\Xn)&=\displaystyle\V\left(\frac{\sum_{i=1}^n X_i}{n}\right)\\
+&=\frac{\displaystyle\sum_{i=1}^n \V(X_i)}{n^2}\\
+&=\frac{\displaystyle\sum_{i=1}^n \sigma^2}{n^2}\\ 
+&=\frac{\sigma^2}{n}\\ 
+\end{align*}
+De plus, 
+\begin{align*}
+\E(\Xn) &= \E(\frac{\sum_{i=1}^n X_i}{n}) =\frac{\sum_{i=1}^n\E(X_i)}{n}= \frac{n\mu}{n} = \mu
+\end{align*}
+d'où
+\begin{align*}
+RQM(\Xn) &= \frac{\sigma^2}{n} + \mu^2 -2\mu\mu + \mu^2= \frac{\sigma^2}{n}\\
+\end{align*}
+\end{4qs2}
+
+\begin{4qs2}
+
+Soit $\sigma^2 := \V(X)$.\newline
+D'une part, on a par le théorème central limite que
+\begin{center}$ \displaystyle\frac{\sum_{i=1}^n X_k-n\mu}{\sqrt{n}\sigma} \longrightarrow \Nc(0,1)$ en loi\end{center}
+D'autre part,
+\begin{align*}
+\displaystyle\frac{\sum_{i=1}^n X_k - n\mu}{\sqrt{n}\sigma} &= \displaystyle n\frac{\sum_{i=1}^n X_k /n -\mu}{\sqrt{n}\sigma}\\
+ &= \displaystyle \sqrt{n}\frac{\Xn -\mu}{\sigma}\\
+\end{align*}
+d'où
+\begin{center}$ \displaystyle \sqrt{n}\frac{\Xn -\mu}{\sigma} \longrightarrow \Nc(0,1)$ en loi\end{center}
+On en déduit donc 	que $\Xn$ est asymptotiquement normal, en effet les deux suites déterministes nous sont données par
+\begin{center}$\mu_n = \mu $ et $\sigma_n = \frac{\sqrt{n}}{\sigma}$ $\forall n\in\N$\end{center}
+
+Par le théorème de Slutsky, on a donc que 
+\begin{center}$ \displaystyle \sqrt{n}(\Xn -\mu)\longrightarrow \sigma Y$ en loi, où $Y\sim\Nc(0,1)$ \end{center}
+Calculons la loi de $\sigma Y$. Pour ne pas changer, soit $\phi$ borélienne.
+\begin{align*}
+\E(\phi(\sigma Y)) &= \int_{\Omega}\phi(\sigma Y)d\Prob\\
+&= \int_{\R}\phi(\sigma y)d\Prob_Y\\
+&= \int_{\R}\phi(\sigma y)\frac{1}{\sqrt{2\pi}}e^{-y^2/2}dy\\
+&\text{changement de variable; on pose $z=\sigma y$; d'où $dy = \frac{dz}{\sigma}$}\\
+&=\int_{\R}\phi(z)\frac{1}{\sqrt{2\pi}\sigma}e^{\frac{-z^2}{2\sigma^2}}dy\\
+\end{align*}
+Ce qui correspond à la densité d'une $\Nc(0, \sigma^2)$. \newline
+Donc $\sigma Y\sim\Nc(0,\sigma^2)$, et finalement
+\begin{center} $ \displaystyle \sqrt{n}(\Xn -\mu)\longrightarrow \Nc(0,\sigma^2)$ en loi\end{center}
+\end{4qs2}
+\end{4q}
+
+\begin{4q}
+
+\begin{4qs3}
+\begin{align*}
+S_n^2 &= \displaystyle\frac{\sum_{i=1}^n(X_i -\Xn)^2}{n}\\
+&= \displaystyle\frac{\sum_{i=1}^n(X_i -\mu +\mu-\Xn)^2}{n}\\
+&=\displaystyle\frac{\sum_{i=1}^n(\Xti -(\Xn-\mu))^2}{n}\\
+&=\displaystyle\frac{\sum_{i=1}^n \Xti^2 - 2\Xti(\Xn-\mu)+(\Xn-\mu)^2}{n}\\
+&=\displaystyle\frac{\sum_{i=1}^n \Xti^2}{n} -2(\Xn-\mu)\frac{\sum_{i=1}^n\Xti}{n}+(\Xn-\mu)^2\\
+& \text{Or, $\Xn - \mu = \frac{\sum_{i=1}^n X_i}{n}-\mu = \displaystyle\frac{\sum_{i=1}^n X_i-n\mu}{n} = \frac{\sum_{i=1}^n\Xti}{n}$,d'où}\\
+S_n^2 &= \displaystyle\frac{\sum_{i=1}^n \Xti^2}{n} -2\frac{\sum_{i=1}^n\Xti}{n}\frac{\sum_{i=1}^n\Xti}{n}+\left(\frac{\sum_{i=1}^n\Xti}{n}\right)^2\\
+&= \displaystyle\frac{\sum_{i=1}^n \Xti^2}{n}- \left(\frac{\sum_{i=1}^n\Xti}{n}\right)^2\\
+\end{align*}
+\end{4qs3}
+
+\begin{4qs3}
+\begin{align*}
+S_n^2 &= \displaystyle\frac{\sum_{i=1}^n(X_i -\Xn)^2}{n} \\
+&=  \displaystyle\frac{\sum_{i=1}^n X_i^2 -2X_i\Xn + \Xn^2}{n}\\
+&=  \displaystyle\frac{\sum_{i=1}^n X_i^2}{n}-2\Xn\frac{\sum_{i=1}^n X_i}{n}+\frac{\sum_{i=1}^n\Xn^2}{n}\\
+&=   \displaystyle\frac{\sum_{i=1}^n X_i^2}{n} - \Xn^2
+\end{align*}
+La loi des grands nombres nous donne donc que
+\begin{center}$\displaystyle\frac{\sum_{i=1}^n X_i^2}{n} - \Xn^2 \longrightarrow \E(X^2) - \E(X)^2= \sigma^2 $ \end{center}
+car $f:x\longmapsto x^2$ est continue.\newline
+$S_n^2$ est donc consistant.
+\end{4qs3}
+
+\begin{4qs3}
+\begin{align*}
+\E(S_n^2) &= \E\left(\displaystyle\frac{\sum_{i=1}^n(X_i -\Xn)^2}{n}\right)\\
+&= \E\left(\displaystyle\frac{\sum_{i=1}^n X_i^2}{n}\right) -2 \E\left(\displaystyle\frac{\sum_{i=1}^n X_i \Xn}{n}\right) +\E\left(\displaystyle\frac{\sum_{i=1}^n \Xn^2}{n}\right) \\
+&= \E\left(\displaystyle\frac{\sum_{i=1}^n X_i^2}{n}\right) -2 \E\left(\displaystyle\Xn\frac{\sum_{i=1}^n X_i}{n}\right) +\sum_{i=1}^n\E \left(\displaystyle\frac{\Xn^2}{n}\right) \\
+&= \E\left(\displaystyle\frac{\sum_{i=1}^n X_i^2}{n}\right) -2 \E\left(\displaystyle\Xn^2\right) +\E\left(\Xn^2\right) \\
+&= \E\left(\displaystyle\frac{\sum_{i=1}^n X_i^2}{n}\right) -\E\left(\displaystyle\Xn^2\right)\\
+& \text{Or, $\sigma^2 = \E(X^2)-\E(X)^2$, donc $\E(X_i^2) = \sigma^2+\E(X_i)^2 = \sigma^2+\mu^2$, d'où}\\
+\E(S_n^2) &= \displaystyle\frac{\sum_{i=1}^n (\sigma^2+\mu^2)}{n}-\E\left(\displaystyle\Xn^2\right)\\
+\end{align*}
+Il nous manque donc à calculer $\E\left(\displaystyle\Xn^2\right)$. 
+\begin{center} $\displaystyle\E\left(\Xn^2\right) = \V(\Xn) + \E(\Xn)^2 = \frac{\sigma^2}{n} + \mu^2$ \end{center}
+d'où
+\begin{center}$\displaystyle \E(S_n^2) = \sigma^2+\mu^2 - (\frac{\sigma^2}{n} + \mu^2) = \frac{n-1}{n}\sigma^2$\end{center}
+\end{4qs3}
+
+\begin{4qs3}
+\end{4qs3}
+
+\begin{4qs3}
+Remarquons en premier lieu, que 
+\begin{align*}
+\E(\widetilde{X_1}^2)\E(\widetilde{X_1}^2) &= \E[(X_1 - \mu)^2]\E[(X_1 - \mu)^2)] \\
+&= \E(X_1^2-2X_1\mu + \mu^2) \E(X_1^2-2X_1\mu + \mu^2)\\
+&=[\E(X_1^2)-2\mu^2+\mu^2][\E(X_1^2)-2\mu^2+\mu^2]\\
+&=(\E(X_1^2)-\E(X_1)^2)^2 \\
+&=\sigma^4
+\end{align*}
+Calculons maintenant $RQM(S_n^2)$
+\begin{align*}
+RQM(S_n^2) &= \V(S_n^2) + \E(S_n^2) -2\sigma^2\E(S_n^2) + \sigma^4\\
+&= \E(S_n^4) - \E(S_n^2)^2 + \E(S_n^2) -2\sigma^2\E(S_n^2) + \sigma^4\\
+&= \E(S_n^4) - 2\sigma^2\frac{n-1}{n}\sigma^2 + \sigma^4\\
+&= \E(S_n^4) - 2\frac{n-1}{n}\sigma^4 + \sigma^4\\
+&= \E(\widetilde{X_1}^2)^2 +\frac{1}{n}(\E(\widetilde{X_1}^4) -3\E(\widetilde{X_1}^2)^2) +\sigma^4(\frac{2-n}{n})\\
+&= \frac{n\sigma^4}{n} +\frac{\E(\widetilde{X_1}^4)}{n}-\frac{3\sigma^4}{n} + \frac{2\sigma^4-n\sigma^4}{n}\\
+&= \frac{\E(\widetilde{X_1}^4)-\sigma^4}{n} = \frac{\E((X-\mu)^4)-\sigma^4}{n}\\
+\end{align*}
+\end{4qs3}
+
+\begin{4qs3}
+Nous avons vu à la question précédente que 
+\begin{center}$ \E(\Xti^2) = \sigma^2$\end{center}
+de plus,
+\begin{align*}
+\V(\Xti^2) &= \E(\Xti^4)-\E(\Xti^2)^2\\
+&= \E((X_i-\mu)^4) -\E(\Xti^2)^2 \\
+&= \E((X-\mu)^4) -(	\sigma^2)^2 \text{   car $X$ de même loi que les $X_i$}\\
+&= \mu^{(4)} - \sigma^4
+\end{align*}
+Le théorème central limite nous indique donc que
+\begin{center}$ \displaystyle\frac{\sum_{i=1}^n \Xti^2 - n\sigma^2}{\sqrt{n(\mu^{(4)} - \sigma^4)}} = \displaystyle\frac{\sum_{i=1}^n \Xti^2 - n\sigma^2}{\sqrt{n} \sqrt{(\mu^{(4)} - \sigma^4)}} \longrightarrow \Nc(0,1)$ en loi\end{center}
+Donc par le théorème de Slutsky, on obtient que
+\begin{center}$ \displaystyle\frac{\sum_{i=1}^n \Xti^2 - n\sigma^2}{\sqrt{n}} \longrightarrow\sqrt{ (\mu^{(4)} - \sigma^4)}\Nc(0,1)$ en loi\end{center}
+Or, 
+\begin{center}
+$ \displaystyle\frac{\sum_{i=1}^n \Xti^2 - n\sigma^2}{\sqrt{n}} = \sqrt{n}\left(\displaystyle \sum_{i=1}^n \frac{\Xti^2}{n} -\sigma^2\right) $
+\end{center}
+Donc
+\begin{center}
+$\sqrt{n}\left(\displaystyle \sum_{i=1}^n \frac{\Xti^2}{n} -\sigma^2\right) \longrightarrow \sqrt{(\mu^{(4)} - \sigma^4)}\Nc(0,1)$ en loi
+\end{center}
+et par un raisonnement similaire à la question 2)iii), on obtient que 
+\begin{center}
+$\sqrt{n}\left(\displaystyle \sum_{i=1}^n \frac{\Xti^2}{n} -\sigma^2\right) \longrightarrow \Nc(0, (\mu^{(4)} - \sigma^4))$ en loi
+\end{center}
+\end{4qs3}
+
+\begin{4qs3}
+
+\begin{align*}
+\sqrt{n}(S_n^2-\sigma^2) &= \sqrt{n}\left(\displaystyle\frac{\sum_{i=1}^n \Xti^2}{n}- \left(\frac{\sum_{i=1}^n\Xti}{n}\right)^2 - \sigma^2\right) \text{   par 3)i)}\\
+&=  \sqrt{n}\left(\displaystyle\frac{\sum_{i=1}^n \Xti^2}{n} - \sigma^2\right) + (-\sqrt{n})\left(\frac{\sum_{i=1}^n\Xti}{n}\right)^2\\
+&=\sqrt{n}\left(\displaystyle\frac{\sum_{i=1}^n \Xti^2}{n} - \sigma^2\right) + \left(-\sqrt{n}\frac{\sum_{i=1}^n\Xti}{n}\right)\frac{\sum_{i=1}^n\Xti}{n}\\
+\end{align*}
+Or,
+\begin{center}$\E(\Xti) = \E(X_i- \mu) = \E(X_i) - \E(\mu) = \mu -\mu=0$\end{center}
+Donc, par la loi des grands nombres, on obtient que 
+\begin{center} $\displaystyle \frac{\sum_{i=1}^n\Xti}{n} \longrightarrow 0$ en probabilité, donc aussi en loi\end{center}
+De plus, de par les calculs effectués à la question 5, on obtient que
+\begin{center} $\V(\Xti) = \E(\Xti^2) - \E(\Xti) = \sigma^2$ \end{center}
+Par le théorème central limite, on en déduit que
+\begin{center} $\displaystyle\sqrt{n}\frac{\sum_{i=1}^n\Xti}{n\sigma}=\left(\frac{\sum_{i=1}^n\Xti}{\sqrt{n}\sigma}\right) \longrightarrow \Nc(0,1)$ en loi\end{center}
+Par un raisonnement similaire à la question 2)iii), on a que 
+\begin{center}$\displaystyle\sigma\sqrt{n}\frac{\sum_{i=1}^n\Xti}{n\sigma} = \displaystyle\left(\frac{\sum_{i=1}^n\Xti}{\sqrt{n}}\right) \longrightarrow \Nc(0,\sigma^2)$ en loi \end{center}
+Pour résumer, on obtient que 
+\begin{center}$  \underbrace{\left(\sqrt{n}\frac{\sum_{i=1}^n\Xti}{n}\right)}_{\longrightarrow \Nc(0,\sigma^2)\text{  en loi}} \underbrace{\frac{\sum_{i=1}^n\Xti}{n}}_{\longrightarrow 0 \text{  en loi}} $\end{center}
+Donc, par Slutsky, 
+\begin{center}$ \displaystyle\left(\sqrt{n}\frac{\sum_{i=1}^n\Xti}{n}\right) \frac{\sum_{i=1}^n\Xti}{n} \longrightarrow 0$ en loi\end{center}
+Ce qui nous donne notre suite $(Y_n)_{n\in\N}$ de v.a. convergent vers 0 en loi.
+\end{4qs3}
+
+
+\begin{4qs3}
+Il suffit de combiner les deux questions précédentes.
+Par Slutsky, on obtient que
+\begin{center} $\sqrt{n}(S_n^2-\sigma^2) = \sqrt{n}\left(\displaystyle\frac{\sum_{i=1}^n \Xti^2}{n} - \sigma^2\right) + Y_n \longrightarrow X + c$ en loi\end{center}
+où $X$ est telle que 
+\begin{center}
+$\sqrt{n}\left(\displaystyle\frac{\sum_{i=1}^n \Xti^2}{n} - \sigma^2\right)\longrightarrow X $ en loi
+\end{center}
+et $c$ telle que
+\begin{center}
+$Y_n \longrightarrow c $ en loi
+\end{center}
+De la question 3)vi), on en déduit que
+\begin{center}$ \sqrt{n}(S_n^2-\sigma^2) \longrightarrow \Nc(0,\mu^{(4)} - \sigma^4) $ en loi\end{center}
+\end{4qs3}
+
+
+\end{4q}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+%\addcontentsline{toc}{part}{Références}
+
+%\begin{thebibliography}{9}
+	%\bibitem{these1}
+	%Référence 1
+%\end{thebibliography}
+
+\end{document}
