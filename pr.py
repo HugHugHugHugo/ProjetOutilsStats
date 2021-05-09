@@ -171,8 +171,6 @@ def Parmi(k,n):
 	c=Factoriel(n)/(Factoriel(k)*Factoriel(n-k))
 	return c
 
-# On suppose que les consommations sont fournies dans une liste 1D
-
 def listToSlices(liste):
 	LPH=[]
 	while len(LPH)<len(liste):
@@ -231,13 +229,10 @@ def Calmax(a,b,listeM,listeY,bruit):
 	for j in range(0,256):
 		Probaj=1
 		for m in range(0,len(lsor)):
-			Probaj = Probaj * math.log(PrHsk(lsor[m][0],lsor[m][1],j,bruit))
-		print(Probaj)
+			Probaj = Probaj * abs(math.log(PrHsk(lsor[m][0],lsor[m][1],j,bruit)))
 		if Probaj > ProbaMax :
 			ProbaMax=Probaj
 			kProbaMax=j
-		print(ProbaMax)
-		print(kProbaMax)
 	RCi=bin(kProbaMax)[2:]
 	while len(RCi)<8 :
 		RCi='0'+RCi # Après ça RCi = la clé que l'algo trouve
